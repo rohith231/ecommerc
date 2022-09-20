@@ -2,10 +2,18 @@ import { getAPI } from '$lib/util/api'
 
 export async function load({ url, params, fetch, parent, setHeaders }) {
 	const { store } = await parent()
-	let faq, shortcode
+	let faq
 	const res = await getAPI(`faqs?store=${store?.id}`)
-	const res1 = await getAPI(`short-code?store=${store?.id}`)
 	faq = res?.data[0]
-	shortcode = res1?.data[0]
-	return { faq, shortcode }
+
+	const shortcode = await getShortCodeData('63218742139b1b312722cae8')
+	faq.answer = faq.answer.replace('[aaa]', shortcode)
+
+	return { faq }
+}
+
+export const getShortCodeData = async (code) => {
+	const res = await getAPI(`short-code/${code}`)
+	const shortcode = res.data
+	return shortcode
 }
