@@ -2,8 +2,8 @@
 export let data //loading, err, faqs, count
 </script>
 
-{#if data.faqs[0]}
-	<div class="prose">
-		{@html data.faqs[0].answer}
-	</div>
-{/if}
+{JSON.stringify(data.shortcode)}
+<div class="prose">
+	{data.shortcode.code}
+	{@html data.faq.answer}
+</div>
