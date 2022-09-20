@@ -2,8 +2,11 @@
 export let data //loading, err, faqs, count
 </script>
 
-{#each data.faqs as f, fx}
-	<div class="prose">
-		{@html f.data}
-	</div>
-{/each}
+<div class="prose">
+	<b> Code: {@html data.faqs[0].code}</b>
+	<br />
+	<br />
+	<br />
+	<br />
+	{@html data.faqs[0].data}
+</div>
