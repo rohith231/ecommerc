@@ -8,19 +8,32 @@ export async function load({ url, params, fetch, parent, setHeaders }) {
 
 	var regex = /\[(.*?)\]/gm;
 
-	var regex1 = /[\[\]']+/gm;
+	var regex1 = /[\[\]'"]+/gm;
 
 	const shorttag = JSON.stringify(faq.answer);
 	var shortco = shorttag.match(regex);
+		
+		for(let i = 0; i < shortco.length; i++){
+			var shortco1 = shortco[i].replace(regex1, '');
+			var shortco2 = shortco1.split(' ');
+			var shortco3 = shortco2[1].split('=');
+			var shortco4 = shortco3[1].replaceAll('\\', '');
+
+
+			const codevalue = await getShortCodeData(shortco4);
+
+            faq.answer = faq.answer.replace('[block id="'+shortco4+'"]', codevalue);
+			
+		
+			 
+	   
+		}
+		
+
+
 	
-	for (let i = 0; i < shortco.length; i++) {
-		const shortcod = shortco[i].replace(regex1, '');
-		const codedata = await getShortCodeData(shortcod)
-	    faq.answer = faq.answer.replace(shortco[i], codedata)
-	}
 	return { faq }
-	
-	
+
 }
 
 
