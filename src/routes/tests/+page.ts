@@ -2,11 +2,9 @@ import { getAPI } from '$lib/util/api'
 
 export async function load({ url, params, fetch, parent, setHeaders }) {
 	const { store } = await parent()
-	let faq, tcode
+	let faq
 	const res = await getAPI(`faqs?store=${store?.id}`)
-	const res1 = await getAPI(`short-code?store=${store?.id}`)
 	faq = res?.data[0]
-	tcode = res1?.data
 
 	var regex = /\[(.*?)\]/gm;
 
@@ -14,8 +12,7 @@ export async function load({ url, params, fetch, parent, setHeaders }) {
 
 	const shorttag = JSON.stringify(faq.answer);
 	var shortco = shorttag.match(regex);
-	var shortcod = shortco.toString().replace(regex1, '');
-
+	
 	for (let i = 0; i < shortco.length; i++) {
 		const shortcod = shortco[i].replace(regex1, '');
 		const codedata = await getShortCodeData(shortcod)
