@@ -15,14 +15,12 @@ export async function load({ url, params, fetch, parent, setHeaders }) {
 	const shorttag = JSON.stringify(faq.answer);
 	var shortco = shorttag.match(regex);
 	var shortcod = shortco.toString().replace(regex1, '');
-    console.log(shortcod);
 
-	const shortcode = await getShortCodeData('aaa')
-	faq.answer = faq.answer.replaceAll(shortco[1], shortcode)
-	const shortcode1 = await getShortCodeData('bbb')
-	faq.answer = faq.answer.replace(shortco[0], shortcode1)
-	
-
+	for (let i = 0; i < shortco.length; i++) {
+		const shortcod = shortco[i].replace(regex1, '');
+		const codedata = await getShortCodeData(shortcod)
+	    faq.answer = faq.answer.replace(shortco[i], codedata)
+	}
 	return { faq }
 	
 	
