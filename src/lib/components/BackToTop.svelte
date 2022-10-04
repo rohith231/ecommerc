@@ -16,14 +16,11 @@
 
 <script>
 import { fly } from 'svelte/transition'
+import { goTop } from '$lib/util/services/backto'
 
 export let showOnPx = 150
 let hidden = true
 
-function goTop() {
-	// scroll to the top
-	window.scroll({ top: 0, behavior: 'smooth' })
-}
 
 function scrollContainer() {
 	return document.documentElement || document.body

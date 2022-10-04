@@ -33,13 +33,15 @@ import { goto } from '$app/navigation'
 import { loginUrl } from '$lib/store'
 import { page } from '$app/stores'
 
+import { toggleWishlist } from '$lib/util/services/wisList'
+
 export let product = {}
 
 let show,
 	showRelatedProducts = false,
 	isWislisted = false,
-	loadingForWishlist = false
-
+    loadingForWishlist = false
+	
 function showitems() {
 	show = true
 }
@@ -48,19 +50,7 @@ function hideitems() {
 	show = false
 }
 
-async function toggleWishlist(id) {
-	try {
-		loadingForWishlist = true
-		isWislisted = await post(`wishlists/toggle`, { product: id, variant: id })
-	} catch (e) {
-		if (e.message === 'You must be logged in') {
-			const url = '/'
-			goto(`${$loginUrl}?ref=${url}`)
-		}
-	} finally {
-		loadingForWishlist = false
-	}
-}
+
 </script>
 
 <div
