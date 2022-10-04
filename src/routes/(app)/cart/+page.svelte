@@ -13,7 +13,9 @@ import ProductCard from '$lib/ProductCard.svelte'
 import { onMount } from 'svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Error from '$lib/components/Error.svelte'
-import cookie from 'cookie'
+
+
+import { addToCart, handleCouponCode, applyCouponCode, removeCouponCode, getProducts, getCoupons, refreshCart } from '$lib/util/services/cartPage'
 
 export let data
 
@@ -44,107 +46,6 @@ onMount(() => {
 })
 
 // console.log('cart', cart)
-
-const addToCart = async ({ pid, vid, qty, options, ix }: any) => {
-	loading[ix] = true
-	const res = await post('carts/add-to-cart', {
-		pid,
-		vid,
-		qty,
-		options
-	})
-	// cart = res
-	// $page.data.cart = res
-	// await refreshCart()
-	await invalidate()
-	loading[ix] = false
-}
-
-function handleCouponCode(couponCode: string) {
-	selectedCouponCode = couponCode
-	applyCouponCode(selectedCouponCode)
-}
-
-async function applyCouponCode(selectedCouponCode: string) {
-	try {
-		loadingApplyCoupon = true
-		const resAC = await post('apply-coupon', { code: selectedCouponCode })
-		appliedCouponInfo = resAC
-		await invalidate()
-		// await refreshCart()
-		openApplyPromoCodeModal = false
-	} catch (e) {
-		couponErr = e
-	} finally {
-		loadingApplyCoupon = false
-	}
-}
-
-async function removeCouponCode() {
-	try {
-		loadingRemoveCoupon = true
-		await del('remove-coupon')
-		selectedCouponCode = ''
-		await invalidate()
-		await refreshCart()
-	} catch (e) {
-		couponErr = e
-	} finally {
-		loadingRemoveCoupon = false
-	}
-}
-
-async function getProducts() {
-	try {
-		loadingProducts = true
-		const resP = await getAPI(`es/products?store=${$page.data?.store?.id}`)
-		products = resP?.hits
-	} catch (e) {
-	} finally {
-		loadingProducts = false
-	}
-}
-
-async function getCoupons() {
-	try {
-		loadingCoupon = true
-		const resC = await getAPI(`coupons?store=${$page.data?.store?.id}`)
-		coupons = resC?.data
-
-		// console.log('coupons = ', coupons)
-	} catch (e) {
-	} finally {
-		loadingCoupon = false
-	}
-}
-
-async function refreshCart() {
-	try {
-		const res = await getAPI('carts/refresh-cart')
-		if (res) {
-			const cookieCart = {
-				items: res?.items,
-				qty: +res?.qty,
-				tax: +res?.tax,
-				subtotal: +res?.subtotal,
-				total: +res?.total,
-				currencySymbol: res?.currencySymbol,
-				discount: res?.discount,
-				selfTakeout: res?.selfTakeout,
-				shipping: res?.shipping,
-				unavailableItems: res?.unavailableItems,
-				formattedAmount: res?.formattedAmount
-			}
-			const str = cookie.serialize('cart', JSON.stringify(cookieCart), { path: '/' })
-
-			console.log('zzzzzzzzzzzzzzzzzzcookieCart', cookieCart)
-
-			data.cart = cookieCart
-		}
-	} catch (e) {
-	} finally {
-	}
-}
 </script>
 
 <SEO {...seoProps} />
