@@ -27,6 +27,7 @@ import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
+import { sortNow, refreshData } from '$lib/util/services/appFun'
 
 export let data
 
@@ -40,32 +41,7 @@ let seoProps = {
 	metadescription: `Find best ${data.searchData || ' '}`
 }
 
-async function sortNow(s) {
-	if (s == 'null' || s == null || s == undefined || s == 'undefined') {
-		$page.url.searchParams.delete('sort')
-	} else {
-		await $page.url.searchParams.set('sort', s)
-	}
-	await goto(`/search?${$page.url.searchParams.toString()}`)
-	await invalidate()
-}
 
-async function refreshData() {
-	await invalidate()
-	// try {
-	// 	const res = await getAPI(`products?${data.query.toString()}`)
-
-	// 	// console.log('refresh res = ', res)
-
-	// 	data.products = res?.data
-	// 	data.count = res?.count
-	// 	data.facets = res?.facets?.all_aggs
-	// 	data.err = !data.products ? 'No result Not Found' : null
-	// } catch (e) {
-	// 	toast(e, 'error')
-	// } finally {
-	// }
-}
 </script>
 
 <SEO {...seoProps} />

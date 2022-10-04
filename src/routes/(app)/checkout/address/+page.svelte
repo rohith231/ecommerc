@@ -6,6 +6,7 @@ import Error from '$lib/components/Error.svelte'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import { getAPI } from '$lib/util/api'
 import { page } from '$app/stores'
+import { addressChanged, refreshAddress } from '$lib/util/services/checkout'
 
 export let data
 $: ({ cart, loading, myAddresses, err, prescriptionId, selectedAddress } = data)
@@ -15,21 +16,6 @@ const seoProps = {
 	metadescription: 'Address'
 }
 
-function addressChanged(detail) {
-	// console.log('detail = ', detail)
-
-	selectedAddress = detail.detail
-}
-
-async function refreshAddress() {
-	try {
-		myAddresses = await getAPI('addresses/my')
-		selectedAddress = myAddresses?.data[0]?._id
-	} catch (e) {
-		err = e
-	} finally {
-	}
-}
 </script>
 
 <SEO {...seoProps} />

@@ -4,6 +4,8 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import { goto } from '$app/navigation'
 
+import { handleParent, toggle } from '$lib/util/services/appFun'
+
 export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -34,23 +36,7 @@ let bgColors = [
 
 let showChild = []
 
-function handleParent(m, mx) {
-	if (showChild[mx] === true) {
-		return
-	} else if (showChild[mx] === false) {
-		showChild[mx] = undefined
-	} else {
-		goto(`/${m.slug}`)
-	}
-}
 
-function toggle(mx) {
-	if (showChild[mx] === true) {
-		showChild[mx] = false
-	} else {
-		showChild[mx] = true
-	}
-}
 </script>
 
 <SEO {...seoProps} />

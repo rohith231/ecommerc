@@ -13,9 +13,7 @@ import ProductCard from '$lib/ProductCard.svelte'
 import { onMount } from 'svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Error from '$lib/components/Error.svelte'
-
-
-import { addToCart, handleCouponCode, applyCouponCode, removeCouponCode, getProducts, getCoupons, refreshCart } from '$lib/util/services/cartPage'
+import { addToCart, handleCouponCode, applyCouponCode, removeCouponCode, getProducts, getCoupons } from '$lib/util/services/cartPage'
 
 export let data
 

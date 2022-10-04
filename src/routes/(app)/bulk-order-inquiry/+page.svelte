@@ -65,15 +65,14 @@ import SEO from '$lib/components/SEO/index.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import { sendRequestForBulkOrder } from '$lib/util/services/bulkOrder'
 
 let seoProps = {
 	title: `Bulk order inquiry`,
 	description: `Bulk order inquiry`
 }
 
-function sendRequestForBulkOrder() {
-	alert('Hi')
-}
+
 </script>
 
 <SEO {...seoProps} />

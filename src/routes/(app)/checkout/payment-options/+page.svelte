@@ -22,6 +22,7 @@ import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import { post } from '$lib/util/api'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { onMount } from 'svelte'
+import { paymentMethodChanged, submit, checkIfStripeCardValid } from '$lib/util/services/checkout'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -68,119 +69,7 @@ onMount(async () => {
 	razorpayReady = true
 })
 
-function paymentMethodChanged(pm) {
-	selectedPaymentMethod = pm
-	errorMessage = null
-}
 
-async function submit(pm) {
-	// console.log('pm = ', pm)
-
-	if (!pm || pm === undefined) {
-		disabled = true
-		errorMessage = 'Please select a payment option'
-		toast('Please select a payment option', 'error')
-		return
-	}
-
-	const paymentMethod = pm.value
-
-	if (paymentMethod === 'cod') {
-		try {
-			loading = true
-			const res = await post('orders/checkout/cod', {
-				address: addressId,
-				paymentMethod: 'COD',
-				prescription: prescription?._id
-			})
-
-			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
-		} catch (e) {
-			toast(e, 'error')
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'cashfree') {
-		try {
-			loading = true
-			const res = await post(`payments/checkout-cf`, { address: addressId })
-			if (res?.redirectUrl && res?.redirectUrl !== null) {
-				goto(`${res?.redirectUrl}`)
-			} else {
-				toast('Something went wrong', 'error')
-			}
-		} catch (e) {
-			toast(e?.message, 'error')
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'razorpay') {
-		try {
-			const rp = await post(`payments/checkout-rp`, {
-				address: addressId
-			})
-
-			// console.log('rp = ', rp)
-
-			const options = {
-				key: rp.keyId, // Enter the Key ID generated from the Dashboard
-				name: 'kitcommerce.tech',
-				description: 'Payment for Misiki',
-				image: '/icon.png',
-				amount: rp.amount,
-				order_id: rp.id,
-				async handler(response) {
-					// console.log('response = ', response)
-
-					try {
-						const capture = await post(`payments/capture-rp`, {
-							rpPaymentId: response.razorpay_payment_id,
-							rpOrderId: response.razorpay_order_id
-						})
-
-						// console.log('capture = ', capture)
-
-						toast('Payment success', 'success')
-						goto(`/payment/success?id=${capture._id}`)
-					} catch (e) {
-						// toast(e, 'error')
-						goto(`/payment/failure?ref=/checkout/payment-options?address=${addressId}`)
-					} finally {
-					}
-				},
-				prefill: {
-					name: `${me.firstName} ${me.lastName}`,
-					phone: me.phone,
-					email: me.email || 'help@kitcommerce.tech',
-					contact: me.phone
-				},
-				notes: {
-					address: '#22, Global Village, Rourkela, Odisha-769002, India'
-				},
-				theme: {
-					color: '#112D4E'
-				}
-			}
-
-			const rzp1 = new Razorpay(options)
-			rzp1.open()
-		} catch (e) {
-			toast(e?.message, 'error')
-		} finally {
-			loading = false
-		}
-	} else {
-		paymentDenied = true
-
-		setTimeout(() => {
-			paymentDenied = false
-		}, 820)
-	}
-}
-
-function checkIfStripeCardValid({ detail }) {
-	disabled = !detail
-}
 </script>
 
 <SEO {...seoProps} />

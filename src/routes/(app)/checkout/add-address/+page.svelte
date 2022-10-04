@@ -7,6 +7,7 @@ import { goto } from '$app/navigation'
 import { toast } from '$lib/util'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { post } from '$lib/util/api'
+import { save } from '$lib/util/services/checkout'
 
 export let data
 
@@ -18,45 +19,7 @@ const seoProps = {
 	metadescription: 'Add Address '
 }
 
-async function save(ads) {
-	const id = data.ads.id || 'new'
-	const {
-		firstName,
-		lastName,
-		email,
-		phone,
-		address,
-		locality,
-		city,
-		district,
-		state,
-		country,
-		zip
-	} = ads
-	try {
-		loading = true
-		const { data, errors } = await post('addresses', {
-			id,
-			firstName,
-			lastName,
-			email,
-			phone,
-			address,
-			locality,
-			city,
-			district,
-			state,
-			country,
-			zip
-		})
-		goto(`/checkout/address`)
-	} catch (e) {
-		toast(err, 'error')
-		err = e
-	} finally {
-		loading = false
-	}
-}
+
 </script>
 
 <SEO {...seoProps} />
