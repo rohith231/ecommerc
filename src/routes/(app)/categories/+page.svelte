@@ -36,7 +36,6 @@ let bgColors = [
 
 let showChild = []
 
-
 </script>
 
 <SEO {...seoProps} />

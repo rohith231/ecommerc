@@ -1,6 +1,7 @@
 import { goto, invalidate } from '$app/navigation'
 import { page } from '$app/stores'
 
+let showChild = []
 
 export async function sortNow(s) {
 	if (s == 'null' || s == null || s == undefined || s == 'undefined') {

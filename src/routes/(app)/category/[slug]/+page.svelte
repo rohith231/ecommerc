@@ -17,7 +17,9 @@ import { sorts } from '$lib/config'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+
+
+
 
 let seoProps = {
 	title: `Category`,
