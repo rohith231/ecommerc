@@ -35,7 +35,10 @@ import { children } from 'svelte/internal'
 
 export let data
 
-let selectedBrand
+let selectedBrand = ''
+
+let selectedOption = ''
+
 // console.log('data = ', data)
 // console.log('data = ', data.category?.children)
 // console.log('Products = ', products)
@@ -118,6 +121,16 @@ let showFilter = false
 let showOnPx = 600
 let showSort = false
 let y
+
+function handleSelectedBrand(event) {
+	selectedBrand = event.target.value
+
+	selectedOption = ''
+}
+
+function handleOptionChange(event) {
+	selectedOption = event.target.value
+}
 
 if (
 	data.products?.facets?.all_aggs?.price_stats?.max > 0 &&
@@ -338,8 +351,8 @@ function handleFilterTags() {
 </CatelogNav>
 
 <div class="h-full min-h-screen">
-		<div class="container bg-[#f5f5f5]">
-			<div class="flex flex-col">
+	<div class="container bg-[#f5f5f5]">
+		<div class="flex flex-col">
 			<div class="flex-auto mt-5 ml-5">
 				<h1 class="text-3xl underline underline-offset-8 text-gray-950 font-bold">
 					Mobile Covers And Cases
@@ -354,7 +367,10 @@ function handleFilterTags() {
 						class="mt-4 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
 						name="mobile-cover"
 						id="mobile-cover"
-						bind:value="{selectedBrand}">
+						bind:value="{selectedBrand}"
+						on:change="{handleSelectedBrand}">
+						<option value="">Select a brand</option>
+
 						{#each value as { children }}
 							{#each children as cdata}
 								<option value="{cdata?.name}">{cdata?.name}</option>
@@ -366,19 +382,20 @@ function handleFilterTags() {
 				{/await}
 			</div>
 
-						<div class="flex-auto">
-				
-					<select
-						class="mt-4 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-						name="mobile-cover"
-						id="mobile-cover">
-						{#if selectedBrand?.children?.length > 0}
-						{#each selectedBrand?.children as children}
-								<option value="{children?.name}">{children?.name}</option>
+			<div class="flex-auto">
+				<select
+					class="mt-4 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+					name="mobile-cover"
+					id="mobile-cover"
+					bind:value="{selectedOption}"
+					on:change="{handleOptionChange}">
+					<option value="">Select Model</option>
+					{#if selectedBrand}
+						{#each selectedBrand as option}
+							<option value="">{option}</option>
 						{/each}
-						{/if}
-					</select>
-				
+					{/if}
+				</select>
 			</div>
 
 			<div class="flex-col">
@@ -393,5 +410,5 @@ function handleFilterTags() {
 				</div>
 			</div>
 		</div>
-		</div>
+	</div>
 </div>
