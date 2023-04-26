@@ -821,11 +821,13 @@ function handleMobileCanvas() {
 					<div class="mb-5">
 						<Skeleton extraSmall />
 					</div>
+
 				{:then value}
 					{#if value.options?.length > 0}
 						<div
 							class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
 							class:shake-animation="{shake}">
+
 							{#each value.options as o}
 								<div class="flex flex-col items-start sm:flex-row">
 									<h6 class="mb-1 w-full shrink-0 font-medium sm:mb-0 sm:w-52">
